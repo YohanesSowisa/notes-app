@@ -10,6 +10,6 @@ COPY . /app
 # Install all needed libraries
 # RUN python -m pip install -v flask requests
 RUN pip install -r requirements.txt
-
+EXPOSE 5000
 # Run Flask
 CMD ["python", "main.py"]

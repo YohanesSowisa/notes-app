@@ -12,6 +12,9 @@ services:
       - DB_NAME=postgres
       - DB_USER=postgres
       - DB_PASS=admin
+      
+    networks:
+      - app-network
 
   db:
     image: postgres:15
@@ -20,9 +23,15 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
     ports:
-      - "5432:5432"
+      - "5430:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
 
 volumes:
   pgdata:
+
+networks:
+  app-network:
+    driver: bridge

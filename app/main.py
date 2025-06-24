@@ -50,7 +50,7 @@
 
 import requests
 from flask import Flask, request, jsonify
-from db import create_table, insert_note, get_all_notes, delete_note_by_id
+from db import create_table, insert_note, get_all_notes, delete_note_by_id, patch_note_by_id
 
 app = Flask(__name__)
 
@@ -83,7 +83,16 @@ def del_notes(id):
   if success:
     return jsonify({"message": f"Catatan Dengan ID {id} Berhasil Dihapus"}), 200
   else:
-    return jsonify({"message": f"Catatan Dengan ID {id} Tidak Ditemukan"}), 404
+    return jsonify({"message": f"Catatan Dengan ID {id} Tidak Ditemukan"}), 4044
+  
+  
+@app.route('/notes/<int:id>', methods=['PATCH'])
+def patch_notes(id):
+  patch_note = request.get_json()
+
+  patched = patch_note_by_id(id, patch_note)
+
+  return jsonify({"message": patched})
 
 if __name__ == '__main__':
   app.run(debug=True, host="0.0.0.0", port=5000)
