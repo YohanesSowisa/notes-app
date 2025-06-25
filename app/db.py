@@ -12,14 +12,15 @@ def get_connection():
 def create_table():
   print("run")
   conn = get_connection()
-  cur = conn.cursor()
+  cur = conn.cursor() 
   cur.execute("""
     CREATE TABLE IF NOT EXISTS notes (
         id SERIAL PRIMARY KEY,
         note TEXT NOT NULL
     )
   """)
-  conn.commit()
+
+  conn.commit() # 
   cur.close()
   conn.close()
 
@@ -50,9 +51,6 @@ def delete_note_by_id(note_id):
   conn.close()
   return deleted
 
-
-
-
 def patch_note_by_id(id, patch):
   conn = get_connection()
   cur = conn.cursor()
@@ -74,3 +72,28 @@ def patch_note_by_id(id, patch):
   cur.close()
   conn.close()
   return result
+
+
+def patch_note_by_id(id, patch):
+    if "note" not in patch:
+        return "Tidak ada data yang diubah"
+    
+    note = patch["note"]
+    if not note.strip():
+        return "Catatan tidak boleh kosong"
+
+    conn = get_connection()
+    cur = conn.cursor()
+    
+    cur.execute("UPDATE notes SET note = %s WHERE id = %s", (note, id))
+    conn.commit()
+
+    result = (
+        f"Isi catatan dengan id {id} diubah menjadi {note}"
+        if cur.rowcount > 0 else
+        f"Catatan dengan id {id} tidak ada"
+    )
+
+    cur.close()
+    conn.close()
+    return result
